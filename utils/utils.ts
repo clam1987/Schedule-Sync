@@ -1,4 +1,7 @@
+import fs from "fs";
+import path from "path";
 import { JWT } from "next-auth/jwt";
+import { NextResponse } from "next/server";
 
 export const refreshAccessToken = async (token: JWT) => {
   try {
@@ -31,5 +34,21 @@ export const refreshAccessToken = async (token: JWT) => {
       ...token,
       error: "RefreshAccessTokenError",
     };
+  }
+};
+
+export const fetchUserData = async () => {
+  try {
+    const user_settings_path = path.join(
+      process.cwd(),
+      "db",
+      "user_setting.json"
+    );
+    const db = await fs.promises.readFile(user_settings_path, "utf8");
+    const data = JSON.parse(db);
+
+    return data;
+  } catch (err) {
+    return NextResponse.json({ err }, { status: 500 });
   }
 };
