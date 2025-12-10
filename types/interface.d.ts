@@ -5,4 +5,10 @@ export interface DriveFile {
 
 export interface DriveListProps {
   drive_list: DriveFile[] | null;
+  handleClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
+}
+
+export interface DriveListPageProps {
+  drive_list: DriveFile[] | null;
+  user?: { name: string; email: string; id: string };
 }

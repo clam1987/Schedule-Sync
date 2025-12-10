@@ -10,8 +10,7 @@ import {
 import { Description } from "@mui/icons-material";
 import { DriveListProps } from "@/types/interface";
 
-const DriveList: React.FC<DriveListProps> = ({ drive_list }) => {
-  console.log("Drive List Props:", drive_list);
+const DriveList: React.FC<DriveListProps> = ({ drive_list, handleClick }) => {
   return (
     <List
       sx={{ width: "100%", maxWidth: "90%", bgcolor: "background.paper" }}

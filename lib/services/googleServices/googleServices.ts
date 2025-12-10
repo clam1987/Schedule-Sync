@@ -1,7 +1,5 @@
-import fs from "fs";
-import path from "path";
 import { JWT } from "next-auth/jwt";
-import { NextResponse } from "next/server";
+import { google } from "googleapis";
 
 export const refreshAccessToken = async (token: JWT) => {
   try {
@@ -37,18 +35,20 @@ export const refreshAccessToken = async (token: JWT) => {
   }
 };
 
-export const fetchUserData = async () => {
+export async function fetchDriveFiles(access_token: string) {
   try {
-    const user_settings_path = path.join(
-      process.cwd(),
-      "db",
-      "user_setting.json"
-    );
-    const db = await fs.promises.readFile(user_settings_path, "utf8");
-    const data = JSON.parse(db);
+    const oauth2 = new google.auth.OAuth2();
+    oauth2.setCredentials({ access_token });
+    const drive = google.drive({ version: "v3", auth: oauth2 });
+    const res = await drive.files.list({
+      pageSize: 10,
+      q: "'me' in owners or sharedWithMe",
+      fields: "files(id, name)",
+    });
 
-    return data;
+    return res.data.files;
   } catch (err) {
-    return NextResponse.json({ err }, { status: 500 });
+    console.error("Error fetching drive files:", err);
+    return null;
   }
-};
+}
