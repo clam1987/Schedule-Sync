@@ -3,7 +3,7 @@ export interface DriveFile {
   name?: string | null | undefined;
 }
 
-export interface DriveListProps {
+export interface DriveListProps extends ButtonProps {
   drive_list: DriveFile[] | null;
   handleClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
 }

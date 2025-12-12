@@ -3,7 +3,6 @@ import { getServerSession } from "next-auth/next";
 import { auth_options } from "@/utils/auth_options";
 import { DriveListProps } from "@/types/interface";
 import { fetchDriveFiles } from "@/lib/services/googleServices/googleServices";
-import { fetchUserByEmail } from "@/lib/services/userServices/userServices";
 import { redirect } from "next/navigation";
 
 const Drive = async () => {
@@ -18,13 +17,12 @@ const Drive = async () => {
 
   const token = session?.access_token;
   const drive_data = await fetchDriveFiles(token!);
-  const user = await fetchUserByEmail(session.user!.email!);
 
   if (drive_data) {
     props.drive_list = drive_data;
   }
 
-  return <DriveListPage drive_list={props.drive_list} user={user} />;
+  return <DriveListPage drive_list={props.drive_list} />;
 };
 
 export default Drive;

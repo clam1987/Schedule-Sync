@@ -52,3 +52,32 @@ export async function fetchDriveFiles(access_token: string) {
     return null;
   }
 }
+
+export async function fetchSpreadSheet(access_token: string, sheet_id: string) {
+  try {
+    const auth = new google.auth.OAuth2();
+    auth.setCredentials({ access_token });
+    const sheets = google.sheets({ version: "v4", auth });
+    const fields = await sheets.spreadsheets.get({
+      spreadsheetId: sheet_id,
+      fields: "sheets.properties.title",
+    });
+    const field_names = fields.data.sheets!.map((x) => x.properties!.title);
+    const today = new Date();
+    const options = {
+      year: "numeric",
+      month: "long",
+    } as const;
+    const current_month = today.toLocaleString("en-US", options);
+    const current_field = field_names.find((name) => name === current_month);
+    const results = await sheets.spreadsheets.values.get({
+      spreadsheetId: sheet_id,
+      range: `${current_field}!A:AZ`,
+    });
+    const row = results.data.values;
+    return row;
+  } catch (err) {
+    console.error(err);
+    throw new Error("Error trying to retrieve sheets");
+  }
+}

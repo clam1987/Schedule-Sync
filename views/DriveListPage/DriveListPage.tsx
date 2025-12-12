@@ -3,15 +3,16 @@ import React from "react";
 import { DriveListPageProps } from "@/types/interface";
 import { Grid } from "@mui/material";
 import DriveList from "@/components/DriveList/DriveList";
-import { saveUserData } from "@/lib/services/userServices/userServices";
+import { saveFile } from "@/lib/services/fileServices/fileServices";
+import { redirect } from "next/navigation";
 
-const DriveListPage: React.FC<DriveListPageProps> = ({ drive_list, user }) => {
+const DriveListPage: React.FC<DriveListPageProps> = ({ drive_list }) => {
   const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
     const id = e.currentTarget.dataset.id!;
     const name = e.currentTarget.innerText;
     const file_info = { id, name };
-    console.log("Clicked file info: ", file_info);
-    saveUserData(user!, file_info);
+    saveFile(file_info);
+    redirect("/sync");
   };
 
   return (

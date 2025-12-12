@@ -26,11 +26,8 @@ export const handleJwtLogic = async ({
   }
 
   if (token.refresh_token) {
-    console.log("Access token expired, refreshing...");
     return await refreshAccessToken(token);
   }
-  console.log("JWT Token:", token);
-  console.log("Account: ", account);
 
   return token;
 };
@@ -54,10 +51,12 @@ export const handleSessionLogic = ({
 
 export const handleSignIn = ({ user }: { user: User }) => {
   if (user?.id) {
-    saveUserData(
-      { id: user.id, name: user.name || "", email: user.email || "" },
-      { id: "", name: "" }
-    );
+    saveUserData({
+      provider_id: user.id,
+      name: user.name || "",
+      email: user.email || "",
+    });
   }
+
   return true;
 };

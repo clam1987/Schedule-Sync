@@ -8,13 +8,13 @@ export default async function Home() {
   const session = await getServerSession(auth_options);
   if (session) {
     const user_in_db = await fetchUserByEmail(session.user!.email!);
-    console.log("user found: ", user_in_db);
-    if (user_in_db.user.id && user_in_db.file.id.length <= 0) {
-      console.log("Redirecting to /drive");
+    if (user_in_db!.files.length === 0) {
       redirect("/drive");
     }
-    // console.log("Session:", session);
-    // redirect("/sync");
+
+    if (user_in_db!.files.length > 0) {
+      redirect("/sync");
+    }
   }
 
   return <HomePage />;

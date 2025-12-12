@@ -23,8 +23,8 @@ const DriveList: React.FC<DriveListProps> = ({ drive_list, handleClick }) => {
       }
     >
       {drive_list ? (
-        drive_list.map(({ id, name }) => (
-          <ListItemButton key={id}>
+        drive_list.map(({ id, name }, i) => (
+          <ListItemButton key={i} onClick={handleClick} data-id={id}>
             <ListItemIcon>
               <Description sx={{ color: "green" }} />
             </ListItemIcon>
